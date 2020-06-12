@@ -1,0 +1,33 @@
+{
+	"name": "kna1csv1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobdqs",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "KNA1.csv",
+				"container": "inputdata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "kunnr",
+				"type": "String"
+			},
+			{
+				"name": "aufsd",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

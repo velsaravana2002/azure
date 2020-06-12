@@ -1,0 +1,41 @@
+{
+	"name": "inputdqs",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobdqs",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "KNMT.csv",
+				"container": "inputdata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "vkorg",
+				"type": "String"
+			},
+			{
+				"name": "kunnr",
+				"type": "String"
+			},
+			{
+				"name": "matnr",
+				"type": "String"
+			},
+			{
+				"name": "werks",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,45 @@
+{
+	"name": "knmtcleandata",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "inputdqs",
+						"type": "DatasetReference"
+					},
+					"name": "knmtcsv"
+				},
+				{
+					"dataset": {
+						"referenceName": "kna1csv1",
+						"type": "DatasetReference"
+					},
+					"name": "kna1csv1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputdqs",
+						"type": "DatasetReference"
+					},
+					"name": "knmtcsvoutput"
+				}
+			],
+			"transformations": [
+				{
+					"name": "knmtcsv1"
+				},
+				{
+					"name": "customeractive"
+				},
+				{
+					"name": "knmtactivecust"
+				}
+			],
+			"script": "source(output(\n\t\tvkorg as string,\n\t\tkunnr as string,\n\t\tmatnr as string,\n\t\twerks as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> knmtcsv\nsource(output(\n\t\tkunnr as string,\n\t\taufsd as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> kna1csv1\nknmtcsv filter(werks!=\"X\") ~> knmtcsv1\nknmtcsv1, kna1csv1 lookup(knmtcsv@kunnr == aufsd,\n\tmultiple: false,\n\tpickup: 'any',\n\tbroadcast: 'auto')~> customeractive\ncustomeractive filter(isNull(aufsd),\n\tpartitionBy('roundRobin', 2)) ~> knmtactivecust\nknmtactivecust sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['knmtdqsoutput'],\n\tpartitionBy('hash', 1),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> knmtcsvoutput"
+		}
+	}
+}
